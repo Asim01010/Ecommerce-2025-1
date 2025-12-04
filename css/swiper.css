@@ -1,0 +1,71 @@
+.home-slider .swiper-pagination-bullet,
+.feature-slider .swiper-pagination-bullet {
+  width: 40px;
+  border-radius: 0;
+  height: 5px;
+  opacity: 1;
+}
+
+.home-slider .swiper-pagination-bullet {
+  background-color: gray;
+}
+.feature-slider .swiper-pagination-bullet {
+  background-color: gray;
+}
+
+.home-slider .swiper-pagination-bullet-active,
+.feature-slider .swiper-pagination-bullet-active {
+  background-color: black !important ;
+}
+
+
+/* General style for pagination bullets */
+.swiper-pagination-bullet {
+  width: 40px;
+ 
+  bottom: -30px !important;
+  height: 5px;
+  background-color: black;
+  border-radius: 0px; /* Soft rounded corners for a smoother look */
+  margin: 0 !important; /* Adds a small gap between the bullets */
+  padding: 0 !important;
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Style for active pagination bullet */
+.swiper-pagination-bullet-active {
+  background-color: rgb(255, 255, 255); /* Active bullet color */
+  width: 40px; /* Width stays the same */
+  height: 8px; /* Increase height on active */
+  border-radius: 0px; /* Rounded corners to match the inactive state */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow for active bullet */
+}
+.swiper-pagination {
+  display: flex; /* Use flexbox to align the bullets */
+  justify-content: center; /* Center the bullets horizontally */
+  align-items: center; /* Center the bullets vertically */
+  bottom: -40px !important;
+  margin-top: 10px; /* Add a small gap above the pagination */
+  border-radius: 10px !important;
+  padding: 10px 0; /* Add padding for better spacing around bullets */
+}
+
+
+.review_slider .swiper-pagination-bullet {
+  width: 40px;
+  height: 5px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 0px; /* Soft rounded corners for a smoother look */
+  margin: 0 !important; /* Adds a small gap between the bullets */
+  padding: 0 !important;
+  margin-top: 30px;
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+}
+
+.review_slider .swiper-pagination-bullet-active {
+  background-color: red; /* Active bullet color */
+  width: 4s0px; /* Width stays the same */
+  height: 8px; /* Increase height on active */
+  border-radius: 0px; /* Rounded corners to match the inactive state */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow for active bullet */
+}

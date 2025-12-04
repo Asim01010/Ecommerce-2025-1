@@ -1,0 +1,25 @@
+RewriteEngine On
+
+RewriteRule ^account-information?$ account-information.php
+RewriteRule ^address-book?$ address-book.php
+RewriteRule ^beretta-club?$ beretta-club.php
+RewriteRule ^checkout?$ checkout.php
+RewriteRule ^guest-checkout?$ guest-checkout.php
+RewriteRule ^my-account?$ my-account.php
+RewriteRule ^my-orders?$ my-order-details.php
+RewriteRule ^product-details?$ product-details.php
+RewriteRule ^products-view?$ products-view.php
+RewriteRule ^search-results?$ search-results.php
+RewriteRule ^shopping-cart?$ shopping-cart.php
+RewriteRule ^sign-in?$ sign-in.php
+RewriteRule ^sign-up?$ sign-up.php
+RewriteRule ^sign-out?$ sign-out.php
+RewriteRule ^since-1526?$ since-1526.php
+RewriteRule ^store-locator?$ store-locator.php
+RewriteRule ^return-exchange?$ return-exchange.php
+RewriteRule ^who-we-are?$ who-we-are.php
+RewriteRule ^contact-us?$ contact-us.php
+RewriteRule ^about-us?$ about-us.php
+
+
+RewriteRule ^page/([0-9a-zA-Z_-]+) _page.php?name=$1

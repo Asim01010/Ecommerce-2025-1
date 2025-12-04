@@ -1,0 +1,146 @@
+@import url("segoeuisl/stylesheet.css");
+ :unknown {
+	outline: 0
+}
+body {
+	margin: 0;	
+	
+	}
+.newsale {
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 10px;
+	COLOR: #000000;
+	FONT-FAMILY: segoeuisl_bold;
+}
+
+
+#ico {
+	width: 100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+#ico ul {
+	list-style-type:none;
+	margin: 0px;
+	}
+	
+#ico li{
+	display:inline-block;
+	text-align:center;
+}
+#ico ul .br{
+	border-right: 3px solid #CCCCCC;
+}
+
+#ico li a {
+	text-decoration:none;
+	color:#000;
+	font-size:12px;
+	
+}
+#ico li a:hover {
+	color: #9C0202;
+}
+.center {
+	margin-top: 10px;
+	margin-left: 5%;
+	font-family: segoeuisl;
+	margin-right: 5%;
+}
+.center_bm {
+	margin-top: 22%;
+	margin-left: 30%;
+	font-family: segoeuisl;
+	font-size: 42px;
+	color: #9C0202;
+	backface-visibility: hidden;
+}
+.center_bm_name {
+	font-family: segoeuisl;
+	font-size: 50px;
+	color: #9C0202;
+}
+.center_bm_by {
+	padding-left: 300px;
+	font-family: segoeuisl;
+	font-size: 18px;
+	color: #000000;
+}
+
+/*heading voucher & reports */
+.for_header {
+	font-family: Tahoma;
+	font-size: 18px;
+	color: #000;
+	font-weight: normal;
+}
+
+
+/*Voucher*/
+.voucher_dw_headings {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 14px;
+	color: #000;
+	font-weight: bold;
+}
+.voucher_table_border {
+	border: 1px solid #666666;
+	font-family: segoeuisl;
+}
+.voucher_header_cell_web {
+	font-family: segoeuisl;
+	font-size: 14px;
+}
+.voucher_headings {
+	font-family: segoeuisl;
+	font-size: 25px;
+}
+.voucher_data_font {
+	font-family: segoeuisl;
+	font-size: 16px;
+}
+.voucher_buttom_info {
+	font-family: segoeuisl;
+	font-size: 13px;
+}
+
+/*reports*/
+.report_header_cell_web {
+	font-family: segoeuisl;
+	font-size: 15px;
+}
+.report_table_heading {
+	font-family: Tahoma;
+	font-size: 12px;
+	color: #FFF;
+	background-color: #000;
+}
+.report_table_data {
+	font-family: Tahoma;
+	font-size: 12px;
+	color: #000;
+	alignment-adjust: after-edge;
+	text-decoration: none;
+}
+.report_buttom {
+	font-family: segoeuisl;
+	font-size: 15px;
+	color: #000;
+}
+.balance_amount_table_buttom {
+	font-family: Tahoma;
+	font-size: 12px;
+	color: #000000;
+	background-color: #CCCCCC;
+}
+/*Text Box*/
+
+#account_title {
+	width: 300px;
+	height: 150px;
+	background-color : #FFFFFF;
+	border: 1px solid #CCC;
+	font: normal 14px segoeuisl;
+	padding: 10px 10px;
+	color: #000;	
+	}
