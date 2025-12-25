@@ -1,0 +1,48 @@
+@font-face {
+  font-family: "optima";
+  src: local("optima"), url("../fonts/optima/optima.woff");
+}
+
+@font-face {
+  font-family: "optima-m";
+  src: local("optima-m"), url("../fonts/optima/optima-m.woff");
+}
+
+@font-face {
+  font-family: "optima-b";
+  src: local("optima-b"), url("../fonts/optima/optima-b.woff");
+}
+
+@font-face {
+  font-family: "kandira";
+  src: local("kandira"), url("../fonts/kandira/kandira-black.ttf");
+}
+
+@font-face {
+  font-family: "HeronSansCondBold";
+  src: local("HeronSansCondBold"), url("../fonts/HeronSansCondBold.otf");
+}
+@font-face {
+  font-family: "HeronSansRegular";
+  src: local("HeronSansRegular"), url("../fonts/HeronSansRegular.otf");
+}
+@font-face {
+  font-family: "HeronSansSemiBold";
+  src: local("HeronSansSemiBold"), url("../fonts/HeronSansSemiBold.otf");
+}
+@font-face {
+  font-family: "PrimeRegular";
+  src: local("PrimeRegular"), url("../fonts/PrimeRegular.otf");
+}
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("../fonts/Montserrat-VariableFont_wght.ttf");
+}
+@font-face {
+  font-family: "PrimeLight";
+  src: local("PrimeLight"), url("../fonts/PrimeLight.otf");
+}
+@font-face {
+  font-family: "DigitalSan";
+  src: local("DigitalSan"), url("../fonts/DigitalSansEFMedium.ttf");
+}

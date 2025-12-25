@@ -1,0 +1,41 @@
+[08-May-2019 16:06:52 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 39
+[08-May-2019 16:06:52 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 41
+[09-May-2019 23:55:07 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 39
+[09-May-2019 23:55:07 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 41
+[09-May-2019 23:59:24 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 39
+[09-May-2019 23:59:24 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 41
+[10-May-2019 00:00:11 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 39
+[10-May-2019 00:00:11 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/tcaonline/public_html/_admin/include/edit_faculty.php on line 41
+[13-Jul-2023 12:06:13 Asia/Karachi] PHP Warning:  unlink(../img/products/6898Px4 5.png): No such file or directory in /home/berettast/public_html/store/_admin/include/manage_product_more_images.php on line 29
+[12-Sep-2023 02:25:17 America/New_York] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home/berettast/public_html/store/_admin/logout.php on line 6
+[12-Sep-2023 02:25:17 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function loggedin() in /home/berettast/public_html/store/_admin/logout.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/berettast/public_html/store/_admin/logout.php on line 7
+[12-Sep-2023 02:28:28 America/New_York] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home/berettast/public_html/store/_admin/logout.php on line 6
+[12-Sep-2023 02:28:28 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function loggedin() in /home/berettast/public_html/store/_admin/logout.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/berettast/public_html/store/_admin/logout.php on line 7
+[12-Sep-2023 11:55:39 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 65
+[12-Sep-2023 11:55:39 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 67
+[12-Sep-2023 11:55:54 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 65
+[12-Sep-2023 11:55:54 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 67
+[12-Sep-2023 11:56:39 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 65
+[12-Sep-2023 11:56:39 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 67
+[12-Sep-2023 13:08:11 Asia/Karachi] PHP Warning:  file_get_contents(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 65
+[12-Sep-2023 13:08:11 Asia/Karachi] PHP Warning:  getimagesize(): Filename cannot be empty in /home/berettast/public_html/store/_admin/include/add_category.php on line 67
+[14-Sep-2023 02:32:48 America/New_York] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home/berettast/public_html/store/_admin/logout.php on line 6
+[14-Sep-2023 02:32:48 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function loggedin() in /home/berettast/public_html/store/_admin/logout.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/berettast/public_html/store/_admin/logout.php on line 7
+[14-Sep-2023 16:06:38 Asia/Karachi] PHP Warning:  move_uploaded_file(../_img/category/resized/50594image.jpeg): failed to open stream: No such file or directory in /home/berettast/public_html/store/_admin/include/manage_categories.php on line 99
+[14-Sep-2023 16:06:38 Asia/Karachi] PHP Warning:  move_uploaded_file(): Unable to move '/tmp/phpcGLx3t' to '../_img/category/resized/50594image.jpeg' in /home/berettast/public_html/store/_admin/include/manage_categories.php on line 99
+[15-Sep-2023 11:44:05 Asia/Karachi] PHP Warning:  unlink(../img/products/55133400x400.jpeg): No such file or directory in /home/berettast/public_html/store/_admin/include/manage_product_more_images.php on line 29
+[15-Sep-2023 11:50:39 Asia/Karachi] PHP Warning:  unlink(../img/products/99116gettyimages-166927710-612x612.jpg): No such file or directory in /home/berettast/public_html/store/_admin/include/manage_product_more_images.php on line 30
+[15-Sep-2023 11:50:44 Asia/Karachi] PHP Warning:  unlink(../img/products/44584400x400.jpeg): No such file or directory in /home/berettast/public_html/store/_admin/include/manage_product_more_images.php on line 30
+[15-Sep-2023 12:33:54 Asia/Karachi] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 8192 bytes) in /home/berettast/public_html/store/img/products/resized/imageinc.php on line 10
+[15-Sep-2023 12:36:43 Asia/Karachi] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 8192 bytes) in /home/berettast/public_html/store/img/products/resized/imageinc.php on line 10
+[15-Sep-2023 12:38:19 Asia/Karachi] PHP Warning:  unlink(../img/products/46363rifle-case-3.jpg): No such file or directory in /home/berettast/public_html/store/_admin/include/manage_product_more_images.php on line 30
+[15-Sep-2023 12:38:22 Asia/Karachi] PHP Warning:  unlink(../img/products/29928rifle-case-3.jpg): No such file or directory in /home/berettast/public_html/store/_admin/include/manage_product_more_images.php on line 30

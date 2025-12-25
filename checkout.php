@@ -1,0 +1,655 @@
+<?php include 'libs/header.php' ?>
+
+
+<section class="bg-pri">
+    <div class="contaienr py-4">
+        <h2 class="text-white font-bold text-center text-2xl lg:text-3xl">Checkout</h2>
+    </div>
+</section>
+
+<?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+
+if (isset($_SESSION['sm_id'])) {
+    $sm_id =  $_SESSION['sm_id'];
+
+    $getcart = mysqli_query($dbcon, "SELECT * FROM sm_cart WHERE cart_uid = '$sm_id'") or die(mysqli_error($dbcon));
+    $cart_count = mysqli_num_rows($getcart);
+    if ($cart_count > 0) {
+
+        if (isset($_POST['place_order_customer'])) {
+
+            // Contact Information
+            $odr_fullname = $_POST['odr_fullname'];
+            $odr_email = $_POST['odr_email'];
+            $odr_mobileno = $_POST['odr_mobileno'];
+
+            // Shipping Information
+            $odr_ship_address = $_POST['odr_ship_address'];
+            $odr_ship_aparment = $_POST['odr_ship_aparment'];
+            $odr_ship_country = $_POST['odr_ship_country'];
+            $odr_ship_city = $_POST['odr_ship_city'];
+            $odr_ship_state = $_POST['odr_ship_state'];
+            $odr_ship_postalcode = $_POST['odr_ship_postalcode'];
+
+            // Payment Method
+            $odr_payment_method = $_POST['odr_payment_method'];
+            // $odr_payment_proof = $_FILES['odr_payment_proof'];
+
+            // Order Number Generator
+            $odr_no = rand(100000, 999999);
+            $odr_no = "BS" . $odr_no;
+
+            $odr_total_price = 0;
+
+            $getcart = mysqli_query($dbcon, "SELECT * FROM sm_cart WHERE cart_uid = '$sm_id'") or die(mysqli_error($dbcon));
+            $cart_count = mysqli_num_rows($getcart);
+            if ($cart_count > 0) {
+                while ($cart_row = mysqli_fetch_assoc($getcart)) {
+                    $pro_id = $cart_row['cart_pro_id'];
+                    $pro_details = mysqli_query($dbcon, "SELECT * FROM sm_products WHERE pro_id = '$pro_id'") or die(mysqli_error($dbcon));
+                    while ($pro_row = mysqli_fetch_assoc($pro_details)) {
+                        $odr_pro_id[] = $cart_row["cart_pro_id"];
+                        $odr_pro_qty[] = $cart_row["cart_pro_qty"];
+                        $odr_pro_size[] = $cart_row["cart_pro_size"];
+                        $odr_pro_color[] = $cart_row["cart_pro_color"];
+                        $odr_pro_name[] = $pro_row["pro_name"];
+                        $odr_pro_price[] = $pro_row["pro_price"];
+                        $odr_total_price = $odr_total_price + ($cart_row["cart_pro_qty"] * $pro_row["pro_price"]);
+                    }
+                }
+                $odr_pro_id = implode(", ", $odr_pro_id);
+                $odr_pro_qty = implode(", ", $odr_pro_qty);
+                $odr_pro_size = implode(", ", $odr_pro_size);
+                $odr_pro_color = implode(", ", $odr_pro_color);
+                $odr_pro_name = implode(", ", $odr_pro_name);
+                $odr_pro_price = implode(", ", $odr_pro_price);
+            }
+
+            $datetime = date('Y-m-d h:i:s');
+
+            ///////////////////////////////////////----COMPANY MAIL----///////////////////////////////////////////////
+
+            $mail = new PHPMailer(true);
+
+            try {
+
+                //Server settings
+                $mail->isSMTP();
+                $mail->Host       = 'splash30.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'info@splash30.com';
+                $mail->Password   = 'Pakistan@1947';
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->Port       = 465;
+
+                //Recipients
+                $mail->setFrom('info@splash30.com', 'Splash 30');
+                $mail->addAddress('info@splash30.com');
+                $mail->addReplyTo('info@splash30.com', 'Splash 30');
+
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = "New Order Placed!";
+                $mail->Body    =  "<table style='border: 1px solid gray; width: 800px; margin: 30px auto; padding: 30px;'>
+                <thead>
+                <tr>
+                <th colspan='2' style='text-align: center;'><img src='https://splash30.com/imgs/logo.svg' style='width: 50%; margin: 20px auto;'></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style='background: #000;'>
+                <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px;'>
+                CONTACT DETAILS
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Full Name
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_fullname
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Mobile Number
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_mobileno
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Email Address
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_email
+                </td>
+                </tr>
+                
+                <tr style='background: #000;'>
+                <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px;'>
+                SHIPPING DETAILS
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Address:
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_ship_address
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Country, City
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_ship_country, $odr_ship_city
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                State:
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_ship_state
+                </td>
+                </tr>
+                <tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Postal Code
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_ship_postalcode
+                </td>
+                </tr>
+                
+                <tr style='background: #000;'>
+                <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px;'>
+                ORDER DETAILS
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Order Type
+                </td>
+                <td style='padding: 10px 30px;'>
+                Customer
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Product(s)
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_pro_name
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Product(s) Sizes
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_pro_size
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Product(s) Colors
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_pro_color
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Product(s) Price
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_pro_price
+                </td>
+                </tr>
+                <tr>
+                <td style='padding: 10px 30px;'>
+                Product(s) QTY
+                </td>
+                <td style='padding: 10px 30px;'>
+                $odr_pro_qty
+                </td>
+                </tr>                
+                <tr>
+                <td style='padding: 10px 30px;'>
+                <b>Grand Total:</b>
+                </td>
+                <td style='padding: 10px 30px;'>
+                <b>$odr_total_price PKR</b>
+                </td>
+                </tr>
+                <tr style='background: #f3f3f3;'>
+                <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px; color: black;'>
+                Email is Powered By <a href='https://www.swismax.com' style='color: red;'>Swismax Solutions FZE</a>
+                </td>
+                </tr>
+                </tbody>
+                </table>";
+
+                if (!$mail->send()) {
+                    $message =  '<div class="container">
+                    <div style="min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;" id="alert-box">
+                        <img src="imgs/cross.png" width="100" class="mb-2" alt="">
+                        <h3 class="font-bold text-2xl mb-3">Something Went Wrong!</h3>
+                        <p class="text-center mb-5">Dear, customer please check you internet connection and try again.</p>
+                        <a href="index.php" class="text-white bg-pri py-3 px-5"> Continue Shopping</a>
+                        </div>
+                    </div>';
+                } else {
+
+                    ///////////////////////////////////////----CUTOMER MAIL----///////////////////////////////////////////////
+
+                    $mail = new PHPMailer(true);
+
+                    try {
+
+                        //Server settings
+                        $mail->isSMTP();
+                        $mail->Host       = 'splash30.com';
+                        $mail->SMTPAuth   = true;
+                        $mail->Username   = 'info@splash30.com';
+                        $mail->Password   = 'Pakistan@1947';
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                        $mail->Port       = 465;
+
+                        //Recipients
+                        $mail->setFrom('info@splash30.com', 'Splash 30');
+                        $mail->addAddress($odr_email);
+                        $mail->addReplyTo('info@splash30.com', 'Splash 30');
+
+
+                        //Content
+                        $mail->isHTML(true);
+                        $mail->Subject = "Thank you for ordering form Splash 30";
+                        $mail->Body    =  "<table style='border: 1px solid gray; width: 800px; margin: 30px auto; padding: 30px;'>
+                    <thead>
+                    <tr>
+                    <th colspan='2' style='text-align: center;'><img src='https://splash30.com/imgs/logo.svg' style='width: 50%; margin: 20px auto;'></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr style='background: #000;'>
+                    <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px;'>
+                    THANK YOU MESSAGE
+                    </td>
+                    </tr>
+                    <tr>
+                    <td colspan='2' style='padding: 10px 30px;'>
+                    <p>
+                    Dear $odr_fullname,<BR>
+                    Your Order has been placed successfully.<BR>Thank you for ordering from Splash 30<BR><BR>
+                    <strong>Kindest Regards,</strong><BR>
+                    Splash 30
+                    </p>
+                    </td>
+                    </tr>
+                    <tr style='background: #000;'>
+                    <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px;'>
+                    ORDER DETAILS
+                    </td>
+                    </tr>
+                    <tr>
+                    <td style='padding: 10px 30px;'>
+                    Product(s)
+                    </td>
+                    <td style='padding: 10px 30px;'>
+                    $odr_pro_name
+                    </td>
+                    </tr>
+                    <tr>
+                    <td style='padding: 10px 30px;'>
+                    Product(s) Sizes
+                    </td>
+                    <td style='padding: 10px 30px;'>
+                    $odr_pro_size
+                    </td>
+                    </tr>
+                    <tr>
+                    <td style='padding: 10px 30px;'>
+                    Product(s) Colors
+                    </td>
+                    <td style='padding: 10px 30px;'>
+                    $odr_pro_color
+                    </td>
+                    </tr>
+                    <tr>
+                    <td style='padding: 10px 30px;'>
+                    Product(s) Price
+                    </td>
+                    <td style='padding: 10px 30px;'>
+                    $odr_pro_price
+                    </td>
+                    </tr>
+                    <tr>
+                    <td style='padding: 10px 30px;'>
+                    Product(s) QTY
+                    </td>
+                    <td style='padding: 10px 30px;'>
+                    $odr_pro_qty
+                    </td>
+                    </tr>
+                    <tr>
+                    <td style='padding: 10px 30px;'>
+                    <b>Grand Total:</b>
+                    </td>
+                    <td style='padding: 10px 30px;'>
+                    <b>$odr_total_price PKR</b>
+                    </td>
+                    </tr>
+                    <tr>
+                    <tr style='background: #f3f3f3;'>
+                    <td colspan='2' style='padding: 10px 30px; color: white; font-weight: bold; letter-spacing: 2px; color: black;'>
+                    Email is Powered By <a href='https://www.swismax.com' style='color: red;'>Swismax Solutions FZE</a>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>";
+                        if (!$mail->send()) {
+                            $message =  '<div class="container">
+                        <div style="min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;" id="alert-box">
+                            <img src="imgs/cross.png" width="100" class="mb-2" alt="">
+                            <h3 class="font-bold text-2xl mb-3">Something Went Wrong!</h3>
+                            <p class="text-center mb-5">Dear, customer please check you internet connection and try again.</p>
+                            <a href="index.php" class="text-white bg-pri py-3 px-5"> Continue Shopping</a>
+                            </div>
+                        </div>';
+                        } else {
+                            $ordersql = mysqli_query($dbcon, "INSERT INTO sm_orders VALUES('', '$odr_no', 'customer', '$odr_pro_id', '$odr_pro_qty', '$odr_pro_size', '$odr_pro_color', '$odr_total_price', '$sm_id', '$odr_email', '$odr_fullname', '$odr_mobileno', '$odr_ship_city', '$odr_ship_country', '$odr_ship_address','$odr_ship_aparment', '$odr_ship_state', '$odr_ship_postalcode', '', '', '$odr_payment_method', '1', '', '$datetime')") or die(mysqli_error($dbcon));
+                            if ($ordersql) {
+
+
+                                // Reducing the quantity
+                                $getcart = mysqli_query($dbcon, "SELECT * FROM sm_cart WHERE cart_uid = '$sm_id'") or die(mysqli_error($dbcon));
+                                if (mysqli_num_rows($getcart) > 0) {
+                                    while ($cart_row = mysqli_fetch_assoc($getcart)) {
+                                        $cart_pro_id = $cart_row['cart_pro_id'];
+                                        $cart_pro_color = $cart_row['cart_pro_color'];
+                                        $cart_pro_size = $cart_row['cart_pro_size'];
+                                        $pro_color_details = mysqli_query($dbcon, "SELECT * FROM sm_products_colors WHERE pc_pro_id = '$cart_pro_id' AND pc_name = '$cart_pro_color'") or die(mysqli_error($dbcon));
+                                        while ($pro_color_row = mysqli_fetch_assoc($pro_color_details)) {
+
+                                            $size =  explode("_", $pro_color_row['pc_size']);
+                                            $qty =  explode("_", $pro_color_row['pc_qty']);
+
+                                            $qty_array = array();
+
+                                            foreach ($size as $key => $value) {
+                                                if ($size[$key] == $cart_pro_size) {
+                                                    $qty[$key] = $qty[$key] - $cart_row['cart_pro_qty'];
+                                                }
+                                                array_push($qty_array, $qty[$key]);
+                                            }
+
+                                            $pro_details = mysqli_query($dbcon, "SELECT * FROM sm_products WHERE pro_id = '$cart_pro_id'") or die(mysqli_error($dbcon));
+                                            while ($pro_row = mysqli_fetch_assoc($pro_details)) {
+                                                $pro_qty = $pro_row['pro_ava_qty'];
+                                                $updated_total_qty = $pro_qty - $cart_row['cart_pro_qty'];
+                                                $update_pro = mysqli_query($dbcon, "UPDATE sm_products SET pro_ava_qty='$updated_total_qty' WHERE pro_id = '$cart_pro_id'") or die(mysqli_error($dbcon));
+                                            }
+
+                                            $updated_size_qty = implode("_", $qty_array);
+
+                                            $update_pro_color = mysqli_query($dbcon, "UPDATE sm_products_colors SET pc_qty ='$updated_size_qty' WHERE pc_pro_id = '$cart_pro_id' AND pc_name = '$cart_pro_color'") or die(mysqli_error($dbcon));
+                                            if ($update_pro_color) {
+                                                $deletecart = mysqli_query($dbcon, "DELETE FROM sm_cart WHERE cart_uid = '$sm_id'") or die(mysqli_error($dbcon));
+                                                if ($deletecart) {
+                                                    $message =  '<div class="container">
+                                                <div style="min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;" id="alert-box">
+                                                    <img src="imgs/accept.png" width="100" class="mb-2" alt="">
+                                                    <h3 class="font-bold text-2xl mb-3">Order Placed Successfully!</h3>
+                                                    <p class="text-center mb-5">Dear, customer thank you for shopping from Beretta Store.<BR> Order details are sent to you via email.</p>
+                                                    <a href="index.php" class="text-white bg-pri py-3 px-5"> Continue Shopping</a>
+                                                    </div>
+                                                </div>';
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                $message =  '<div class="container">
+                            <div style="min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;" id="alert-box">
+                                <img src="imgs/cross.png" width="100" class="mb-2" alt="">
+                                <h3 class="font-bold text-2xl mb-3">Something Went Wrong!</h3>
+                                <p class="text-center mb-5">Dear, customer please check you internet connection and try again.</p>
+                                <a href="index.php" class="text-white bg-pri py-3 px-5"> Continue Shopping</a>
+                                </div>
+                            </div>';
+                            }
+                        }
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    }
+                }
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+        }
+
+        if (isset($message)) {
+            echo $message;
+        } else { ?>
+            <section>
+                <div class="container py-16 ">
+                    <form method="post" class="flex flex-wrap">
+                        <div class="w-full lg:w-1/2 pr-0 lg:pr-10 mb-10 lg:mb-0">
+                            <div class="mb-8">
+                                <h4 class="font-bold text-2xl lg:text-3xl text-pri mb-4">Contact Information</h4>
+                                <div class="flex flex-col gap-5 justify-center">
+                                    <input type="text" name="odr_fullname" value="<?php echo $_SESSION['sm_username'] ?>" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Full Name" required>
+                                    <input type="email" name="odr_email" value="<?php echo $_SESSION['sm_email'] ?>" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Email Address" required>
+                                    <input type="number" name="odr_mobileno" value="<?php echo $_SESSION['sm_contact_no'] ?>" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Mobile Number" required>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-8">
+                                <h4 class="font-bold text-2xl lg:text-3xl text-pri mb-4">Shipping Information</h4>
+                                <div class="flex flex-col gap-5 justify-center">
+
+                                    <?php
+                                    $get_address = mysqli_query($dbcon, "SELECT * FROM sm_addressbook WHERE ab_uid = '$sm_id'") or die(mysqli_error($dbcon));
+                                    if ($address_row = mysqli_fetch_assoc($get_address)) { ?>
+                                        <input type="text" name="odr_ship_address" value="<?php echo $address_row['ab_address'] ?>" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Address" readonly>
+                                        <input type="text" name="odr_ship_aparment" value="<?php echo $address_row['ab_appartment_suite'] ?>" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Apartment, suite, etc. (optional)" readonly>
+                                        <div class="flex flex-wrap lg:flex-nowrap gap-3">
+                                            <input type="text" name="odr_ship_country" value="<?php echo $address_row['ab_country'] ?>" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="Country" readonly>
+                                            <input type="text" name="odr_ship_city" value="<?php echo $address_row['ab_city'] ?>" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="City" readonly>
+                                        </div>
+                                        <div class="flex flex-wrap lg:flex-nowrap gap-3">
+                                            <input type="text" name="odr_ship_state" value="<?php echo $address_row['ab_state'] ?>" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="State" readonly>
+                                            <input type="number" name="odr_ship_postalcode" value="<?php echo $address_row['ab_postal_code'] ?>" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="Postal Code" readonly>
+                                        </div>
+                                        <span class="text-[10px] lg:text-sm">You can update your address from account settings.</span>
+                                    <?php
+                                    }
+                                    else{
+                                    ?>
+                                    <input type="text" name="odr_ship_address" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Address" >
+                                        <input type="text" name="odr_ship_aparment" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Apartment, suite, etc. (optional)" >
+                                        <div class="flex flex-wrap lg:flex-nowrap gap-3">
+                                            <input type="text" name="odr_ship_country" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="Country" >
+                                            <input type="text" name="odr_ship_city" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="City" >
+                                        </div>
+                                        <div class="flex flex-wrap lg:flex-nowrap gap-3">
+                                            <input type="text" name="odr_ship_state" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="State" >
+                                            <input type="number" name="odr_ship_postalcode" class="border outline-none px-5 py-2 w-full lg:w-1/2" placeholder="Postal Code" >
+                                        </div>
+                                    <?php 
+                                    }
+                                    ?>
+
+                                    <!-- <div class="flex flex-col gap-2">
+                                        <div>
+                                            <input type="checkbox" name="odr_bill_ship" id="toggle_billingform">
+                                            <label for="" class="text-sm">Billing Address is same as Shipping Address.</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="save_ship_address">
+                                            <label for="" class="text-sm">Save this information for Future Shopping</label>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <!-- <div class="mb-8" id="billingform">
+                                <h4 class="font-bold text-2xl lg:text-3xl text-pri mb-4">Billing Information</h4>
+                                <div class="flex flex-col gap-5 justify-center">
+                                    <input type="text" name="odr_bill_address" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Address">
+                                    <input type="text" name="odr_bill_aparment" class="text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Apartment, suite, etc. (optional)">
+                                    <div class="flex gap-2">
+                                        <input type="text" name="odr_bill_country" class="border outline-none px-5 py-2 w-1/2" placeholder="Country">
+                                        <input type="text" name="odr_bill_city" class="border outline-none px-5 py-2 w-1/2" placeholder="City">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <input type="text" name="odr_bill_state" class="border outline-none px-5 py-2 w-1/2" placeholder="State">
+                                        <input type="number" name="odr_bill_postalcode" class="border outline-none px-5 py-2 w-1/2" placeholder="Postal Code">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <input type="checkbox" name="save_bill_address">
+                                        <label for="" class="text-sm">Save this information for Future Shopping</label>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div>
+                                <h4 class="font-bold text-2xl lg:text-3xl text-pri mb-4">Payment Method</h4>
+                                <div class="flex flex-col gap-3 justify-center">
+                                    <div class="flex gap-2">
+                                        <input type="radio" name="odr_payment_method" value="Cheque Payment">
+                                        <label for="" class="text-sm">Cheque Payment</label>
+                                    </div> 
+
+                                     <div>
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="radio" name="odr_payment_method" id="bank_transfer" value="Direct Bank Transfer" checked>
+                                        <label for="" class="text-sm">Direct Bank Transfer</label>
+                                    </div>
+                                    <div id="bank_details">
+                                        <table class="border text-sm">
+                                            <tr>
+                                                <td class="px-4 py-2"><b>Bank Name</b></td>
+                                                <td class="px-4 py-2">Faysal Bank Limited</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-2"><b>Account Name</b></td>
+                                                <td class="px-4 py-2">SPLASH30 (PRIVATE) LIMITED</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-2"><b>Account No</b></td>
+                                                <td class="px-4 py-2">3105301000004348</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-2"><b>IBAN</b></td>
+                                                <td class="px-4 py-2">PK16FAYS3105301000004348</td>
+                                            </tr>
+                                            <!--<tr>-->
+                                            <!--    <td class="px-4 py-2"><b>Beneficiary Name</b></td>-->
+                                            <!--    <td class="px-4 py-2">VISION 2020</td>-->
+                                            <!--</tr>-->
+                                        </table>
+                                    </div>
+                                </div>
+
+                                    <div class="flex gap-2">
+                                        <input type="radio" name="odr_payment_method" value="Cash On Delivery (COD)">
+                                        <label for="" class="text-sm">Cash On Delivery (COD)</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-1/2 h-full bg-transparent lg:bg-gray-100 lg:border px-0 lg:px-10 py-5 sticky top-16">
+                            <h3 class="text-xl lg:text-2xl font-medium mb-5">Cart (<span class="cart_count">0</span>)</h3>
+                            <div class="relative overflow-x-auto mb-5">
+                                <table class="w-[220%] lg:w-[170%]">
+                                    <tbody id="cart_details">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bg-pri p-5 ml-auto text-white">
+                                <h3 class="text-lg lg:text-xl font-bold text-center mb-5">Order Summary</h3>
+                                <div class="flex justify-between border-t py-3 text-sm lg:text-base font-medium">
+                                    <h4>Total Items:</h4>
+                                    <p class="cart_count">0</p>
+                                </div>
+                                <div class="flex justify-between border-y py-3 text-sm lg:text-base font-medium mb-12">
+                                    <h4>Total:</h4>
+                                    <p class="total_price">0</p>
+                                </div>
+
+                                <div class="flex justify-between items-center text-xs lg:text-base">
+                                    <a href="./" class="">Continue Shopping</a>
+                                    <button type="submit" name="place_order_customer" class="bg-white text-pri font-medium py-3 px-5">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+    <?php
+        }
+    } else {
+        echo "<script>window.location.href = './'</script>";
+    }
+} else { ?>
+    <section>
+        <div class="container py-16 min-h-[80vh] relative flex flex-wrap">
+            <div class="h-[375px] lg:h-auto w-full lg:w-1/2 bg-pri p-5">
+                <div class="h-full flex justify-center items-center">
+                    <a href="guest-checkout" class="bg-white font-medium py-3 px-5 text-sm lg:text-lg">Continue as Guest</a>
+                </div>
+            </div>
+            <div class="absolute flex justify-center items-center bg-orange-500 text-white shadow-lg rounded-full lg:w-14 lg:h-14 w-10 h-10 text-base lg:text-xl font-medium top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                OR
+            </div>
+            <div class="mx-auto w-full lg:w-1/2 bg-gray-100 border p-6 lg:p-10">
+                <h4 class="font-bold text-center text-2xl lg:text-3xl text-pri mb-8">Sign in</h4>
+                <form method="post" class="mb-5">
+                    <div class="flex flex-col gap-5 justify-center">
+                        <input type="email" name="user_email" class="text-sm lg:text-base text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Enter Email" required>
+                        <input type="password" name="user_password" class="text-sm lg:text-base text-sm text-base border outline-none px-5 py-2 w-full" placeholder="Enter Password" required>
+                        <div class="flex justify-between items-center mb-8 text-xs lg:text-base">
+                            <div>
+                                <input type="checkbox" name="" id="">
+                                <label for="">Remember me</label>
+                            </div>
+                            <a href="forget-password.php">Forget Password?</a>
+                        </div>
+                    </div>
+                    <button type="submit" name="signin" class="text-white bg-pri py-3 px-5 w-full text-sm lg:text-base">Sign in</button>
+                </form>
+                <p class="text-center text-xs lg:text-base">
+                    Don't have an account?<BR class="block lg:hidden"> <a href="sign-up" class="text-orange-500">Register Now!</a>
+                </p>
+            </div>
+        </div>
+    </section>
+<?php
+}
+?>
+
+
+<?php include 'libs/footer.php' ?>
